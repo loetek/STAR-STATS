@@ -1,25 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import List from './List'
+import Axios from 'axios';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      people:[],
+    }
+    this.getPeople = this.getPeople.bind(this);
+  }
+
+getStats(){
+  return Axios.get("https://swapi.co/api/people")
+  .then((response) => {
+    console.log(response.data.results)
+    this.setState({people:response.data.results})
+  })
+}
+
+componentDidMount(){
+  this.getStats();
+}
+
+
   render() {
+    const {people} = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <List people = {people} />
       </div>
     );
   }
